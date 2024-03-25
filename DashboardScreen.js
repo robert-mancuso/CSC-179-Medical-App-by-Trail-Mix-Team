@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, TextInput, Button, ScrollView} from 'react-native';
+import PatientScreen from './PatientScreen';
 
 const DashboardScreen = ({navigation}) => {
     return (
@@ -28,11 +29,7 @@ const DashboardScreen = ({navigation}) => {
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.sectionHeader}>Patient Search</Text>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search Patients"
-                        onChangeText={(text) => {}}
-                    />
+                    <Button title="Patient List" onPress={() => navigation.navigate('Patient List')} />
                 </View>
             </ScrollView>
         </View>
