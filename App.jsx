@@ -1,19 +1,28 @@
 // App.jsx
 import React from 'react';
+import { GluestackUIProvider} from "@gluestack-ui/themed";
+import { config } from "@gluestack-ui/config";
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DashboardScreen from './DashboardScreen'; // Assume this is the path to your component
-import ScheduleAppointmentScreen from './ScheduleAppointmentScreen'; // And this one too
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createNativeStackNavigator();
+import ScheduleScreen from './Screens/ScheduleScreen';
+import PatientScreen from './Screens/PatientScreen';
+import MyTabBarIcon from './Components/MyTabBarIcon';
+
+const Tab = createBottomTabNavigator();
 
 function App() {
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Dashboard">
-                <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Doctor\'s Dashboard' }} />
-                <Stack.Screen name="ScheduleAppointment" component={ScheduleAppointmentScreen} options={{ title: 'Schedule Appointment' }} />
-            </Stack.Navigator>
+        <NavigationContainer> 
+            <GluestackUIProvider config={config}>
+                <Tab.Navigator>
+                    <Tab.Screen 
+                        name="Schedule" 
+                        component={ScheduleScreen}
+                    />
+                    <Tab.Screen name="Patients" component={PatientScreen} />
+                </Tab.Navigator>
+            </GluestackUIProvider>
         </NavigationContainer>
     );
 }
