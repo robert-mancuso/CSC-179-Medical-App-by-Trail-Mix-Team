@@ -1,11 +1,28 @@
-import React from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
-// Assume DateTimePicker and other necessary imports are correctly set up
+import { fetchPatients, scheduleAppointment } from '../services/apiService';
+import AppointmentModel from '../Models/AppointmentModel';
 
 const ScheduleAppointmentScreen = () => {
-  // Here you would define your state variables and functions to handle changes
+  // When scheduling an appointment:
+    const handleScheduleAppointment = async () => {
+      try {
+        const newAppointment = new AppointmentModel(
+          selectedPatient,
+          appointmentType,
+          appointmentDate,
+          reasonForVisit,
+          duration
+        );
+        await scheduleAppointment(newAppointment);
+        console.log('Appointment scheduled successfully');
+        // Handle success, maybe navigate back or show a success message
+      } catch (error) {
+        console.error(error.message);
+        // Handle error, maybe show a user-friendly error message
+      }
+    };
 
   return (
     <View>
