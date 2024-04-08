@@ -23,7 +23,7 @@ const DashboardScreen = ({navigation}) => {
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.sectionHeader}>Appointment Scheduling</Text>
-                    <Button title="View Schedule" onPress={() => {}} />
+                    <Button title="View Schedule" onPress={() => navigation.navigate('Schedule')} />
                     <Button title="Schedule Appointment" onPress={() => navigation.navigate('ScheduleAppointment')} />
                     <Button title="Manage Appointments" onPress={() => {}} />
                 </View>
