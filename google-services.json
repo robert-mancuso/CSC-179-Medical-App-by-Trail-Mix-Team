@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "812559398282",
+    "project_id": "csc179-trailmix",
+    "storage_bucket": "csc179-trailmix.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812559398282:android:b7d1f1aa6afc823064c473",
+        "android_client_info": {
+          "package_name": "com.csc_179_medical_tracking_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS5pTYxjgIy9i9yY4lRhph29GwxrnT0-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
