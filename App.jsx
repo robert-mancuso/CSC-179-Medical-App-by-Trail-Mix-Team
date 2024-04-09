@@ -6,8 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import ScheduleScreen from './Screens/ScheduleScreen';
-import PatientScreen from './Screens/PatientScreen';
+import PatientScreen from './PatientScreen';
 import MyTabBarIcon from './Components/MyTabBarIcon';
+import UpdatesScreen from './Screens/UpdatesScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,7 @@ function App() {
                         name="Schedule" 
                         component={ScheduleScreen}
                     />
+                    <Tab.Screen name="Updates" component={UpdatesScreen} />
                     <Tab.Screen name="Patients" component={PatientScreen} />
                 </Tab.Navigator>
             </GluestackUIProvider>
