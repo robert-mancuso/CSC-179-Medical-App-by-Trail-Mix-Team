@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { fetchPatients, scheduleAppointment } from '../services/apiService';
-import AppointmentModel from '../Models/AppointmentModel';
 
 const ScheduleAppointmentScreen = () => {
   // When scheduling an appointment:

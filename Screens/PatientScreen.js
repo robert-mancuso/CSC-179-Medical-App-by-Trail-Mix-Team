@@ -1,13 +1,27 @@
+import { TouchableOpacity } from 'react-native';
 import React from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
+import {useNavigation } from "@react-navigation/native";
 
-const PatientEntry = ({ name, dob, appointment }) => (
-  <View style={styles.patientEntry}>
-    <Text style={styles.patientName}>{name}</Text>
-    <Text style={styles.patientDob}>{dob}</Text>
-    {appointment && <Text style={styles.appointmentText}>Appointment: {appointment}</Text>}
-  </View>
-);
+const PatientEntry = ({ name, dob, appointment }) => {
+  const {navigate} = useNavigation();
+  return(
+    <TouchableOpacity
+      onPress={() => {
+        navigate("Patient Details");
+      }}
+      activeOpacity={0.6}
+    >
+      <View style={styles.patientEntry}>
+        <Text style={styles.patientName}>{name}</Text>
+        <Text style={styles.patientDob}>{dob}</Text>
+        {appointment && <Text style={styles.appointmentText}>Appointment: {appointment}</Text>}
+      </View>
+    </TouchableOpacity>
+  );
+  
+ 
+};
 
 const PatientScreen = () => {
   const patients = [
