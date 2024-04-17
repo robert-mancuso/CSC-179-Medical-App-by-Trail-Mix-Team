@@ -19,7 +19,7 @@ const LoginScreen = () => {
     const correctPassword = 'pwtest';
     if (username === correctUsername && password === correctPassword) {
       console.log('Login successful');
-      navigation.navigate('Dashboard');
+      navigation.navigate('Calendar');
     } else {
       console.log('Login failed: Incorrect username or password');    
       // navigation.navigate('Dashboard');
