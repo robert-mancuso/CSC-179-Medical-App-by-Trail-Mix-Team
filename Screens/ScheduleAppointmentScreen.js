@@ -1,64 +1,102 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { fetchPatients, scheduleAppointment } from '../services/apiService';
+import React, { useState } from 'react';
+import { View, TextInput, Text, Button, StyleSheet, Platform, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const ScheduleAppointmentScreen = () => {
-  // When scheduling an appointment:
-    const handleScheduleAppointment = async () => {
-      try {
-        const newAppointment = new AppointmentModel(
-          selectedPatient,
-          appointmentType,
-          appointmentDate,
-          reasonForVisit,
-          duration
-        );
-        await scheduleAppointment(newAppointment);
-        console.log('Appointment scheduled successfully');
-        // Handle success, maybe navigate back or show a success message
-      } catch (error) {
-        console.error(error.message);
-        // Handle error, maybe show a user-friendly error message
-      }
+const ScheduleAppointmentScreen = ({ navigation }) => {
+    const [appointmentTitle, setAppointmentTitle] = useState('');
+    const [appointmentDate, setAppointmentDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const [location, setLocation] = useState('');
+    const [notes, setNotes] = useState('');
+
+    const onDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || appointmentDate;
+        setShow(Platform.OS === 'ios');
+        setAppointmentDate(currentDate);
     };
 
-  return (
-    <View>
-      <Text>Patient:</Text>
-      {/* Implementation of Patient Selector */}
-      <Picker>
-        {/* Populate with patients */}
-      </Picker>
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
 
-      <Text>Appointment Type:</Text>
-      {/* Implementation of Appointment Type Selector */}
-      <Picker>
-        {/* Populate with appointment types */}
-      </Picker>
+    const handleSaveAppointment = () => {
+        Alert.alert('Appointment Saved', `Appointment "${appointmentTitle}" saved successfully.`);
+        navigation.goBack();
+    };
 
-      <Text>Date and Time:</Text>
-      {/* Implementation of Date and Time Picker */}
-      {/* DateTimePicker component */}
+    return (
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      >
+      <ScrollView>
+        <View style={styles.innerContainer}>
+            <Text style={styles.label}>Appointment Title:</Text>
+            <TextInput
+                style={styles.input}
+                value={appointmentTitle}
+                onChangeText={setAppointmentTitle}
+                placeholder="Enter appointment title"
+            />
 
-      <Text>Reason for Visit:</Text>
-      <TextInput
-        // TextInput properties for reason
-      />
+            <Button title="Choose Date" onPress={() => showMode('date')} />
+            <Text>Date: {appointmentDate.toLocaleDateString()}</Text>
+            <Button title="Choose Time" onPress={() => showMode('time')} />
+            <Text>Time: {appointmentDate.toLocaleTimeString()}</Text>
 
-      <Text>Duration:</Text>
-      {/* Implementation for selecting duration */}
-      <Picker>
-        {/* Duration options */}
-      </Picker>
+        {show && (
+            <DateTimePicker
+                testID="dateTimePicker"
+                value={appointmentDate}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onDateChange}
+            />
+        )}
 
-      <TouchableOpacity onPress={() => {/* Function to handle appointment scheduling */}}>
-        <Text>Schedule Appointment</Text>
-      </TouchableOpacity>
+        <Text style={styles.label}>Location:</Text>
+        <TextInput
+            style={styles.input}
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Enter location"
+        />
+
+        <Text style={styles.label}>Notes:</Text>
+        <TextInput
+            style={styles.input}
+            value={notes}
+            onChangeText={setNotes}
+            placeholder="Enter any notes"
+            multiline
+        />
+
+        <Button title="Save Appointment" onPress={handleSaveAppointment} color="#007AFF" />
     </View>
-  );
+  </ScrollView>
+</KeyboardAvoidingView>
+);
 };
 
-// Add StyleSheet for styling your components
+const styles = StyleSheet.create({
+container: {
+flex: 1,
+padding: 10,
+justifyContent: 'space-between', 
+},
+label: {
+marginTop: 20,
+},
+input: {
+borderWidth: 1,
+borderColor: '#cccccc',
+padding: 10,
+marginTop: 5,
+marginBottom: 10,
+},
+});
 
 export default ScheduleAppointmentScreen;
