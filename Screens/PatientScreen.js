@@ -1,34 +1,44 @@
-import { TouchableOpacity } from 'react-native';
-import React from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
-import {useNavigation } from "@react-navigation/native";
-import { Button } from 'react-native';
-
-const PatientEntry = ({ name, dob, appointment }) => {
-  const {navigate} = useNavigation();
-  return(
-    <TouchableOpacity
-      onPress={() => {
-        navigate("Patient Details");
-      }}
-      activeOpacity={0.6}
-    >
-      <View style={styles.patientEntry}>
-        <Text style={styles.patientName}>{name}</Text>
-        <Text style={styles.patientDob}>{dob}</Text>
-        {appointment && <Text style={styles.appointmentText}>Appointment: {appointment}</Text>}
-      </View>
-    </TouchableOpacity>
-  );
-  
- 
-};
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
 const PatientScreen = () => {
+  const [patients, setPatients] = useState([]);
+  const navigation = useNavigation();
   const { navigate } = useNavigation();
-  const patients = [
-    // ... your existing patients array ...
-  ];
+
+  useEffect(() => {
+    const database = getDatabase();
+    const patientsRef = ref(database, 'patients');
+
+    // Listen for changes in the 'patients' node of the database
+    const unsubscribe = onValue(patientsRef, (snapshot) => {
+      const data = snapshot.val();
+      const patientList = data ? Object.keys(data).map(key => ({
+        ...data[key],
+        id: key // Ensure each patient has an 'id' property
+      })) : [];
+      setPatients(patientList);
+    });
+
+    // Unsubscribe from the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+  const renderPatient = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => {
+        // Pass the patient's ID and other details to the PatientDetailScreen
+        navigation.navigate('Patient Details', { ...item });
+      }}
+      style={styles.patientEntry}
+    >
+      <Text style={styles.patientName}>{item.name}</Text>
+      <Text style={styles.patientDob}>{item.dob}</Text>
+      {item.appointment && <Text style={styles.appointmentText}>Appointment: {item.appointment}</Text>}
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -39,7 +49,8 @@ const PatientScreen = () => {
       />
       <FlatList
         data={patients}
-        renderItem={({ item }) => <PatientEntry {...item} />}
+        keyExtractor={(item) => item.id}
+        renderItem={renderPatient}
       />
     </View>
   );
