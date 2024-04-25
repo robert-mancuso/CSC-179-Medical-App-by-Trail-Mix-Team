@@ -48,7 +48,7 @@ function ScheduleStackGroup({navigation}){
 function PatientStackGroup({ navigation }) {
     return (
       <PatientStack.Navigator>
-        <PatientStack.Screen name="Patient" component={PatientScreen} />
+        <PatientStack.Screen name="Patients" component={PatientScreen} />
         <PatientStack.Screen name="Patient Details" component={PatientDetailScreen} />
         {/* Add this line for the AddPatientScreen */}
         <PatientStack.Screen name="AddPatient" component={AddPatientScreen} />
@@ -86,7 +86,7 @@ const Tabs = () => {
                 <Tab.Screen name="PatientStack" component={PatientStackGroup}
                     options={{
                         headerShown: false,
-                        tabBarLabel: "Schedule"
+                        tabBarLabel: "Patients"
                     }}
                 />
             </Tab.Navigator>
