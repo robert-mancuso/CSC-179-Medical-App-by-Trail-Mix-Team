@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
-import firebase from 'firebase/app';
-import 'firebase/database';
-
-// Initialize Firebase with your configuration
-/*const firebaseConfig = {
-    apiKey: "AIzaSyAS5pTYxjgIy9i9yY4lRhph29GwxrnT0-E",
-    authDomain: "csc179-trailmix",
-    databaseURL: "https://csc179-trailmix.firebaseio.com",
-    projectId: "csc179-trailmix", 
-    storageBucket: "csc179-trailmix.appspot.com", 
-    messagingSenderId: "812559398282", 
-    appId: "1:812559398282:android:b7d1f1aa6afc823064c473", 
-};
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }*/
-
+// Import the database functions from Firebase
+import { getDatabase, ref, push, set } from 'firebase/database';
 
 const AddPatientScreen = () => {
   const [name, setName] = useState('');
@@ -24,23 +9,23 @@ const AddPatientScreen = () => {
   const [appointment, setAppointment] = useState('');
 
   const handleAddPatient = () => {
-    // Reference to the /patients node in your Firebase Realtime Database
-    const patientsRef = firebase.database().ref('patients');
+    // Get a reference to the database
+    const database = getDatabase();
+    // Create a reference to the 'patients' node
+    const patientsRef = ref(database, 'patients');
     
-    // Push a new child to the patients node with the patient data
-    const newPatientRef = patientsRef.push();
-    newPatientRef.set({
+    // Push a new child to the 'patients' node with the patient data
+    const newPatientRef = push(patientsRef);
+    set(newPatientRef, {
       name,
       dob,
       appointment,
-    }, (error) => {
-      if (error) {
-        // The write failed...
-        console.error("Failed to add patient: ", error);
-      } else {
-        // Data saved successfully!
-        console.log("Patient added successfully!");
-      }
+    }).then(() => {
+      // Data saved successfully!
+      console.log("Patient added successfully!");
+    }).catch((error) => {
+      // The write failed...
+      console.error("Failed to add patient: ", error);
     });
   };
 

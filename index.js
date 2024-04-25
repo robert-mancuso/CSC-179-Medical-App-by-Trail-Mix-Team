@@ -8,7 +8,7 @@ import { getDatabase } from 'firebase/database';
 const firebaseConfig = {
   apiKey: "AIzaSyAS5pTYxjgIy9i9yY4lRhph29GwxrnT0-E",
   authDomain: "csc179-trailmix.firebaseapp.com",
-  databaseURL: "https://csc179-trailmix.firebaseio.com",
+  databaseURL: "https://csc179-trailmix-default-rtdb.firebaseio.com/",
   projectId: "csc179-trailmix",
   storageBucket: "csc179-trailmix.appspot.com",
   messagingSenderId: "812559398282",
@@ -20,3 +20,5 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 AppRegistry.registerComponent(appName, () => App);
+
+export { app, database };
