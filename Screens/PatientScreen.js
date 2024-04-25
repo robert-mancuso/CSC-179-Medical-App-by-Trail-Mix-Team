@@ -2,6 +2,7 @@ import { TouchableOpacity } from 'react-native';
 import React from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import {useNavigation } from "@react-navigation/native";
+import { Button } from 'react-native';
 
 const PatientEntry = ({ name, dob, appointment }) => {
   const {navigate} = useNavigation();
@@ -24,14 +25,18 @@ const PatientEntry = ({ name, dob, appointment }) => {
 };
 
 const PatientScreen = () => {
+  const { navigate } = useNavigation();
   const patients = [
-    { name: 'John Smith', dob: 'Jan 18, 1988', appointment: 'August 13, 2024' },
-    { name: 'Jane Doe', dob: 'May 2, 1997', appointment: 'March 30, 2024' },
+    // ... your existing patients array ...
   ];
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Patients</Text>
+      <Button
+        title="Add Patient"
+        onPress={() => navigate('AddPatient')}
+      />
       <FlatList
         data={patients}
         renderItem={({ item }) => <PatientEntry {...item} />}

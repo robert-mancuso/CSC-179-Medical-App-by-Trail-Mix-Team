@@ -10,6 +10,7 @@ import PatientScreen from '../Screens/PatientScreen';
 import UpdatesScreen from '../Screens/UpdatesScreen';
 import ScheduleAppointmentScreen from '../Screens/ScheduleAppointmentScreen';
 import PatientDetailScreen from '../Screens/PatientDetailScreen';
+import AddPatientScreen from '../Screens/AddPatientScreen';
 
 const ScheduleStack = createNativeStackNavigator();
 const PatientStack = createNativeStackNavigator();
@@ -44,14 +45,16 @@ function ScheduleStackGroup({navigation}){
     )
 }
 
-function PatientStackGroup(){
-    return(
-        <PatientStack.Navigator>
-             <PatientStack.Screen name="Patient" component={PatientScreen} />
-             <PatientStack.Screen name="Patient Details" component={PatientDetailScreen}/>
-        </PatientStack.Navigator>
-    )
-}
+function PatientStackGroup({ navigation }) {
+    return (
+      <PatientStack.Navigator>
+        <PatientStack.Screen name="Patient" component={PatientScreen} />
+        <PatientStack.Screen name="Patient Details" component={PatientDetailScreen} />
+        {/* Add this line for the AddPatientScreen */}
+        <PatientStack.Screen name="AddPatient" component={AddPatientScreen} />
+      </PatientStack.Navigator>
+    );
+  }
 
 const Tab = createBottomTabNavigator();
 
