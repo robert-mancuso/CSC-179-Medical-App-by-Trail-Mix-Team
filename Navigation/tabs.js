@@ -19,6 +19,8 @@ function ScheduleStackGroup({navigation}){
     return(
         <ScheduleStack.Navigator>
              <ScheduleStack.Screen name="Schedule" component={ScheduleScreen}
+                initialParams={{ onSaveAppointment: (newAppointment) => {
+                }}}
                  options={{
                     headerRight: () => (
                         <Button
@@ -28,8 +30,12 @@ function ScheduleStackGroup({navigation}){
                             isDisabled={false}
                             isFocusVisible={false}
                             onPress={() => {
-                                navigation.navigate("Schedule Appointment");
-                            }}
+                                navigation.navigate("Schedule Appointment", {
+                                    onSaveAppointment: (newAppointment) => navigation.navigate('Schedule', {
+                                        newAppointment: newAppointment
+                                })
+                            });
+                        }}
                         >
                             <ButtonText>Add Appointment </ButtonText>
                             <ButtonIcon as={AddIcon} />
