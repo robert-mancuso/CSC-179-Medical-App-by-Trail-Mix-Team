@@ -16,7 +16,7 @@ const LoginRegisterScreen = () => {
             style={styles.background}
         >
             <View style={styles.logoContainer}>
-                <Image source={require('./images/test.png')} style={styles.logo} />
+                <Image source={require('./images/ProjectLogo.webp')} style={styles.logo} />
                 <Text style={styles.title}>HealthLink</Text>
             </View>
             <View style={styles.buttonContainer}>
