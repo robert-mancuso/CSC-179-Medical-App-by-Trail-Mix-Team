@@ -41,21 +41,23 @@ const CalendarView = ({ appointments }) => {
 
 const loadItems = (day) => {
   setTimeout(() => { 
-      const newItems = {};
+    setItems(prevItems => {
+      const newItems = {...prevItems};  // Copy the current items state
       const time = new Date(day.timestamp);
 
-      for (let i = -15; i < 85; i++) { 
-          const date = new Date(time);
-          date.setDate(date.getDate() + i);
-
-          const strTime = date.toISOString().split('T')[0];
-          if (!items[strTime]) {
-              newItems[strTime] = []; 
-          }
+      for (let i = -15; i < 85; i++) {
+        const date = new Date(time);
+        date.setDate(date.getDate() + i);
+        const strTime = date.toISOString().split('T')[0];
+        if (!newItems[strTime]) {
+            newItems[strTime] = [];  // Initialize with empty array if not already set
+        }
       }
-      setItems({...items, ...newItems});
-  }, 1000); 
+      return newItems;
+    });
+  }, 1000);
 };
+
 
 
   const timeToString = (time) => {
