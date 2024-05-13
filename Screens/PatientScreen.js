@@ -17,7 +17,8 @@ const PatientScreen = () => {
       const data = snapshot.val();
       const patientList = data ? Object.keys(data).map(key => ({
         ...data[key],
-        id: key // Ensure each patient has an 'id' property
+        id: key, // Ensure each patient has an 'id' property
+        familyNames: data[key].family ? data[key].family.map(id => data[id].name) : [], // Replace family IDs with names
       })) : [];
       setPatients(patientList);
     });
@@ -37,6 +38,8 @@ const PatientScreen = () => {
       <Text style={styles.patientName}>{item.name}</Text>
       <Text style={styles.patientDob}>{item.dob}</Text>
       {item.appointment && <Text style={styles.appointmentText}>Appointment: {item.appointment}</Text>}
+      {item.allergies && <Text style={styles.allergiesText}>Allergies: {item.allergies.join(', ')}</Text>}
+      {item.familyNames && <Text style={styles.familyText}>Family: {item.familyNames.join(', ')}</Text>}
     </TouchableOpacity>
   );
 
@@ -79,6 +82,12 @@ const styles = StyleSheet.create({
   },
   appointmentText: {
     color: '#008000',
+  },
+  allergiesText: {
+    color: '#ff0000',
+  },
+  familyText: {
+    color: '#0000ff',
   },
 });
 

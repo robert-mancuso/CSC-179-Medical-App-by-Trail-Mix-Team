@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { getDatabase, ref, update, set } from 'firebase/database';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 
 const PatientDetailScreen = () => {
   const route = useRoute();
-  const { id, name: initialName, dob: initialDob, appointment: initialAppointment } = route.params;
+  const { id, name: initialName, dob: initialDob, appointment: initialAppointment, allergies: initialAllergies, family: initialFamily } = route.params;
   const [editedName, setEditedName] = useState(initialName);
   const [editedDob, setEditedDob] = useState(initialDob);
   const [editedAppointment, setEditedAppointment] = useState(initialAppointment);
+  const [editedAllergies, setEditedAllergies] = useState(initialAllergies.join(', '));
+  const [editedFamily, setEditedFamily] = useState(initialFamily);
   const { navigate } = useNavigation();
 
   const updatePatient = () => {
@@ -16,6 +18,8 @@ const PatientDetailScreen = () => {
       name: editedName,
       dob: editedDob,
       appointment: editedAppointment,
+      allergies: editedAllergies.split(',').map(item => item.trim()),
+      family: editedFamily,
     };
   
     const database = getDatabase();
@@ -29,7 +33,6 @@ const PatientDetailScreen = () => {
         console.error('Error updating patient data:', error);
       });
   };
-  
 
   return (
     <View style={styles.container}>
@@ -56,6 +59,14 @@ const PatientDetailScreen = () => {
           style={styles.detailInput}
           value={editedAppointment}
           onChangeText={setEditedAppointment}
+        />
+      </View>
+      <View style={styles.detailContainer}>
+        <Text style={styles.detailLabel}>Allergies:</Text>
+        <TextInput
+          style={styles.detailInput}
+          value={editedAllergies}
+          onChangeText={setEditedAllergies}
         />
       </View>
       <Button title="Save" onPress={updatePatient} />

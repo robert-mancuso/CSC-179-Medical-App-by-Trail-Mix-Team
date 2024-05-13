@@ -1,30 +1,44 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
-// Import the database functions from Firebase
-import { getDatabase, ref, push, set } from 'firebase/database';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { getDatabase, ref, push, set, onValue } from 'firebase/database';
+import RNPickerSelect from 'react-native-picker-select';
 
 const AddPatientScreen = () => {
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
   const [appointment, setAppointment] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [family, setFamily] = useState('No');
+  const [familyMembers, setFamilyMembers] = useState([]);
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    const database = getDatabase();
+    const patientsRef = ref(database, 'patients');
+
+    onValue(patientsRef, (snapshot) => {
+      const data = snapshot.val();
+      const patientList = data ? Object.keys(data).map(key => ({
+        label: data[key].name,
+        value: key,
+      })) : [];
+      setPatients(patientList);
+    });
+  }, []);
 
   const handleAddPatient = () => {
-    // Get a reference to the database
     const database = getDatabase();
-    // Create a reference to the 'patients' node
     const patientsRef = ref(database, 'patients');
-    
-    // Push a new child to the 'patients' node with the patient data
     const newPatientRef = push(patientsRef);
     set(newPatientRef, {
       name,
       dob,
       appointment,
+      allergies: allergies.split(',').map(item => item.trim()),
+      family: family === 'Yes' ? familyMembers : [],
     }).then(() => {
-      // Data saved successfully!
       console.log("Patient added successfully!");
     }).catch((error) => {
-      // The write failed...
       console.error("Failed to add patient: ", error);
     });
   };
@@ -49,6 +63,34 @@ const AddPatientScreen = () => {
         value={appointment}
         onChangeText={setAppointment}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Allergies (comma-separated)"
+        value={allergies}
+        onChangeText={setAllergies}
+      />
+      <Text>Is the patient part of a family?</Text>
+      <RNPickerSelect
+        onValueChange={(value) => setFamily(value)}
+        items={[
+            { label: 'No', value: 'No' },
+            { label: 'Yes', value: 'Yes' },
+        ]}
+      />
+      {family === 'Yes' && (
+        <>
+          <Text>Select Family Members:</Text>
+          <RNPickerSelect
+            onValueChange={(value) => setFamilyMembers([...familyMembers, value])}
+            items={patients.filter(patient => !familyMembers.includes(patient.value))}
+          />
+          <Text>Remove Family Members:</Text>
+          <RNPickerSelect
+            onValueChange={(value) => setFamilyMembers(familyMembers.filter(member => member !== value))}
+            items={patients.filter(patient => familyMembers.includes(patient.value))}
+          />
+        </>
+      )}
       <Button
         title="Add Patient"
         onPress={handleAddPatient}
