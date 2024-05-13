@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, ImageBackground, Alert } from 'react-native';
 import { useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { getDatabase, ref, push, get, set } from 'firebase/database';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+
 
 const LoginScreen = () => {
   const [username, setUsername] = useState(''); 
@@ -12,19 +15,23 @@ const LoginScreen = () => {
       headerShown: false,
     });
   }, [navigation]);
+  
   const handleLogin = () => {
-    // login logic here
-    // check the username and password against authentication service
-    const correctUsername = 'test123';
-    const correctPassword = 'pwtest';
-    if (username === correctUsername && password === correctPassword) {
-      console.log('Login successful');
-      navigation.navigate('Calendar');
-    } else {
-      console.log('Login failed: Incorrect username or password');    
-      // navigation.navigate('Dashboard');
-    }
+    const dummyEmail = `${username}@example.com`; 
+    const auth = getAuth();
+    console.log("Attempting to log in with:", dummyEmail, password); 
+    signInWithEmailAndPassword(auth, dummyEmail, password)
+        .then((userCredential) => {
+            console.log("Login successful", userCredential); 
+            Alert.alert('Login successful');
+            navigation.navigate('Calendar');
+        })
+        .catch((error) => {
+            console.error("Login failed:", error); 
+            Alert.alert('Login failed', 'Incorrect username or password');
+        });
   };
+  
 
   return (
     <ImageBackground
